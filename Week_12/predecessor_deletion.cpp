@@ -49,6 +49,20 @@ public:
         else
             return this;
     }
+    BinarySearchTree *max()
+    {
+        if (right)
+            return left->max();
+        else
+            return this;
+    }
+    void special_delete(BinarySearchTree *child)
+    {
+        data = child->data;
+        left = child->left;
+        right = child->right;
+        delete child;
+    }
     BinarySearchTree *delete_node(int target, BinarySearchTree *node)
     {
         if (!node)
@@ -61,16 +75,16 @@ public:
         {
             auto temp = node;
             if (!node->left && !node->right)
-                node = nullptr;
+                delete node;
             else if (!node->right)
-                node = node->left;
+                node->special_delete(node->left);
             else if (!node->left)
-                node = node->right;
+                node->special_delete(node->right);
             else
             {
-                auto mn = node->right->min();
-                node->data = mn->data;
-                node->right = delete_node(node->data, node->right);
+                auto mx = node->left->max(); // predecessor
+                node->data = mx->data;
+                node->left = delete_node(node->data, node->left);
                 temp = nullptr;
             }
             if (temp)
@@ -88,6 +102,4 @@ public:
 
 int main()
 {
-    vector<int> v = {100, 70, 60, 75};
-    return 0;
 }
