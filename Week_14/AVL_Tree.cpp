@@ -27,8 +27,6 @@ private:
     {
         return ch_height(left) - ch_height(right);
     }
-
-public:
     AVLTree *right_rotation(AVLTree *node)
     {
         AVLTree *p = node->left;
@@ -47,6 +45,25 @@ public:
         q->update_height();
         return q;
     }
+    AVLTree *balance(AVLTree *node)
+    {
+        if (node->balance_factor() == 2)
+        {
+            if (node->left->balance_factor() == -1)
+                node->left = left_rotation(node->left);
+            node = right_rotation(node);
+        }
+        else if (node->balance_factor() == -2)
+        {
+            if (node->left->balance_factor() == 1)
+                node->right = right_rotation(node->right);
+
+            node = left_rotation(node);
+        }
+        return node;
+    }
+
+public:
 };
 
 int main()
