@@ -25,8 +25,7 @@ public:
             int cur = str[idx] - 'a';
             if (child[cur] == 0)
                 child[cur] = new trie();
-            else
-                child[cur]->insert(str, idx + 1);
+            child[cur]->insert(str, idx + 1);
         }
     }
     bool word_exist(string str, int idx = 0)
@@ -51,9 +50,32 @@ public:
 
         return child[cur]->prefix_exist(str, idx + 1);
     }
+    string first_word_prefix(const string &str)
+    {
+        trie *t = this;
+        for (int idx = 0; idx < str.length(); idx++)
+        {
+            int ch = str[idx] - 'a';
+            if (!t->child[ch])
+                break;
+
+            if (t->child[ch]->is_leaf)
+                return str.substr(0, idx + 1);
+
+            t = t->child[ch];
+        }
+        return str;
+    }
 };
 int main()
 {
+    trie ss;
+    ss.insert("xyz");
+    ss.insert("xyzea");
+    ss.insert("a");
+    ss.insert("bc");
+    cout << ss.first_word_prefix("x") << endl;
+    cout << ss.first_word_prefix("xyzabc") << endl;
 
     return 0;
 }
