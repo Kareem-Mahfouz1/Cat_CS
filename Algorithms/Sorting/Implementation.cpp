@@ -125,6 +125,43 @@ void Merge_Sort(vector<int> &arr) // time O(n log(n)), space O(n)
     if (!arr.empty())
         Merge_Sort(arr, 0, arr.size() - 1);
 }
+int Partition(vector<int> &arr, int start, int end)
+{
+    int i = start;
+    int j = end;
+    int pivot = i;
+    while (1)
+    {
+        while (arr[pivot] <= arr[j] && pivot != j)
+            j--;
+        if (pivot == j)
+            break;
+        else if (arr[pivot] > arr[j])
+        {
+            swap(arr[pivot], arr[j]);
+            pivot = j;
+        }
+        while (arr[pivot] >= arr[i] && pivot != i)
+            i++;
+        if (pivot == i)
+            break;
+        else if (arr[pivot] < arr[i])
+        {
+            swap(arr[pivot], arr[i]);
+            pivot = i;
+        }
+    }
+    return pivot;
+}
+void Quick_Sort(vector<int> &arr, int l, int r)
+{
+    if (l < r)
+    {
+        int piv = Partition(arr, l, r);
+        Quick_Sort(arr, l, piv - 1);
+        Quick_Sort(arr, piv + 1, r);
+    }
+}
 
 void display(vector<int> arr)
 {
@@ -138,6 +175,6 @@ void display(vector<int> arr)
 int main()
 {
     vector<int> nums = {1, 5, 9, 3, 0, 7, 2};
-    Merge_Sort(nums);
+    Quick_Sort(nums, 0, nums.size() - 1);
     display(nums);
 }
